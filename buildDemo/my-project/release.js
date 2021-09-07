@@ -24,22 +24,13 @@ if (args.length > 0) {
   });
 }
 
-/* // 示例
-setTimeout(() => {
-  new Release({
-    releaseName: "wxy发布",
-    backupName: "wxy备份",
-    mainBranch: "main"
-  });
-}, 0) */
-
-/* // build示例
+// build示例
 setTimeout(() => {
   new Release({
     buildDir: "View",
     mainBranch: "main"
   });
-}, 0); */
+}, 0);
 
 class Release {
   constructor(data) {

@@ -5,9 +5,7 @@
   "main": "release.js",
   "scripts": {
     "standard": "standard-version",
-    "releaseB": "node release.js type=build",
     "release": "node release.js",
-    "releaseBV": "node release.js type=build --versionFlag",
     "releaseV": "node release.js --versionFlag"
   },
   "repository": {

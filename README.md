@@ -17,8 +17,8 @@ npm run releaseV
 ## npm run release 
 根据commit内容 获取产生变化文件 生成发布包 推送代码
 
-## npm run releaseB 
+## npm run releaseBV 
 与上相同 多一个打版本号操作
 
-## npm run release 
+## npm run releaseV 
 与上相同 多一个打版本号操作
