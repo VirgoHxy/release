@@ -223,9 +223,9 @@ class Release {
     let regexp = new RegExp(regexpStr);
     for (let index = 0; index < diffArr.length; index++) {
       const element = diffArr[index];
-      if (regexp.test(element)) {
-        let pathSrc = path.resolve(__dirname, element);
-        let targetSrc = path.resolve(src, element);
+      if (regexp.test(element.fileName)) {
+        let pathSrc = path.resolve(__dirname, element.fileName);
+        let targetSrc = path.resolve(src, element.src);
         this.copyByPathSync(pathSrc, targetSrc);
       }
     }
@@ -244,11 +244,14 @@ class Release {
       diffStr = diffStr.replace(/\s$/, "");
       diffArr = diffStr.split("\n");
       if (diffArr.length > 0) {
-        // 只去文件名数组 不需要路径
-        diffArr = diffArr.map(ele => {
-          return ele.match(/[^\\/]*$/)[0]
-        });
         console.log("改动文件: " + diffArr.join("\n\r"));
+        // fileName文件名 src完整路径
+        diffArr = diffArr.map(ele => {
+          return {
+            fileName: ele.match(/[^\\/]*$/)[0],
+            src: ele
+          };
+        });
         this.copyFiles(diffArr, this.option.releaseSrc);
         this.copyBackupFiles(diffArr);
       } else {
