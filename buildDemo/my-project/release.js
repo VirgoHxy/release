@@ -27,7 +27,7 @@ if (args.length > 0) {
 // build示例
 setTimeout(() => {
   new Release({
-    buildDir: "View",
+    buildDir: "dist",
     mainBranch: "main"
   });
 }, 0);
