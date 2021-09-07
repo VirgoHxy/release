@@ -243,6 +243,10 @@ class Release {
       diffStr = diffStr.replace(/\s$/, "");
       diffArr = diffStr.split("\n");
       if (diffArr.length > 0) {
+        // 只去文件名数组 不需要路径
+        diffArr = diffArr.map(ele => {
+          return ele.match(/[^\\/]*$/)[0]
+        });
         console.log("改动文件: " + diffArr.join("\n\r"));
         this.copyFiles(diffArr, this.option.releaseSrc);
         this.copyBackupFiles(diffArr);
@@ -281,9 +285,9 @@ class Release {
       this.exec("npm run standard");
     }
     console.log("开始执行: push命令");
-    // 发布
+    // 推送
     this.exec("git push");
-    // 提交所有 tag
+    // 推送所有 tag
     if (this.option.versionFlag) {
       console.log("开始执行: push --tags命令");
       this.exec("git push --tags");

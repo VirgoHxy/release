@@ -244,6 +244,7 @@ class Release {
       diffStr = diffStr.replace(/\s$/, "");
       diffArr = diffStr.split("\n");
       if (diffArr.length > 0) {
+        // 只去文件名数组 不需要路径
         diffArr = diffArr.map(ele => {
           return ele.match(/[^\\/]*$/)[0]
         });
