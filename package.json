@@ -1,0 +1,70 @@
+{
+  "name": "release",
+  "version": "1.0.0",
+  "description": "",
+  "main": "release.js",
+  "scripts": {
+    "standard": "standard-version",
+    "releaseB": "node release.js type=build",
+    "release": "node release.js",
+    "releaseBV": "node release.js type=build --versionFlag",
+    "releaseV": "node release.js --versionFlag"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VirgoHxy/release.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VirgoHxy/release/issues"
+  },
+  "homepage": "https://github.com/VirgoHxy/release#readme",
+  "standard-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "需求"
+      },
+      {
+        "type": "fix",
+        "section": "修复"
+      },
+      {
+        "type": "perf",
+        "section": "优化"
+      },
+      {
+        "type": "docs",
+        "section": "文档"
+      },
+      {
+        "type": "chore",
+        "hidden": true
+      },
+      {
+        "type": "style",
+        "hidden": true
+      },
+      {
+        "type": "refactor",
+        "hidden": true
+      },
+      {
+        "type": "test",
+        "hidden": true
+      },
+      {
+        "type": "conflict",
+        "hidden": true
+      },
+      {
+        "type": "revert",
+        "hidden": true
+      }
+    ]
+  },
+  "dependencies": {
+    "shelljs": "^0.8.4"
+  }
+}
