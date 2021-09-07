@@ -1,6 +1,10 @@
 # release
 自动化发布并生成发布包
 
+release.js 需要放在与package.json同级的根目录
+
+依赖shelljs和standard-version
+
 ```
 npm run releaseB 
 
