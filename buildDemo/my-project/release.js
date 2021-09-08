@@ -3,7 +3,7 @@ const shell = require("shelljs");
 const path = require("path");
 const fs = require("fs");
 const homeDir = require("os").homedir();
-const desktopDir = path.resolve(homeDir, "Desktop");
+const desktopPath = path.resolve(homeDir, "Desktop");
 const args = process.argv.slice(2);
 const argObj = {};
 
@@ -28,7 +28,8 @@ if (args.length > 0) {
 setTimeout(() => {
   new Release({
     buildDir: "dist",
-    mainBranch: "main"
+    mainBranch: "main",
+    rootPath: path.resolve(__dirname, "../../")
   });
 }, 0);
 
@@ -56,9 +57,10 @@ class Release {
       /** 可配置参数
        * releaseName 发布名称(选填) 日期(MMDD)会和其组成完整名称
        * backupName 备份名称(选填) 日期(MMDD)会和其组成完整名称
-       * legalTypeArr 合法的文件类型(选填)
-       * mainBranch 发布分支(选填)
-       * baseDir 文件基础路径(选填)
+       * legalTypeArr 合法的文件类型(选填) 默认js,css,html,cshtml
+       * rootPath 根目录(选填) 默认release.js所在目录 release.js不在根目录需修改
+       * mainBranch 发布分支(选填) 默认master
+       * baseDir 文件基础路径(选填) 默认桌面
        * versionFlag 是否打版本号(选填)
        */
       console.log("开始执行: init函数");
@@ -66,8 +68,9 @@ class Release {
         releaseName,
         backupName,
         legalTypeArr = ["js", "css", "html", "cshtml"],
+        rootPath = __dirname,
         mainBranch = "master",
-        baseDir = desktopDir,
+        baseDir = desktopPath,
         versionFlag = false
       } = this.option || {};
       console.log("传入配置: " + JSON.stringify(this.option));
@@ -77,6 +80,8 @@ class Release {
           releaseName,
           legalTypeArr,
           backupName,
+          rootPath,
+          mainBranch,
           baseDir,
           versionFlag
         })
@@ -98,6 +103,7 @@ class Release {
       this.option.backupSrc = backupSrc;
       this.option.legalTypeArr = legalTypeArr;
       this.option.mainBranch = mainBranch;
+      this.option.rootPath = rootPath;
 
       if (!fs.existsSync(releaseSrc)) {
         fs.mkdirSync(releaseSrc);
@@ -131,16 +137,18 @@ class Release {
       /** 可配置参数
        * buildDir 打包后文件所在的文件夹(必填)
        * releaseName 发布名称(选填) 日期(MMDD)会和其组成完整名称
-       * mainBranch 发布分支(选填)
-       * baseDir 文件基础路径(选填)
+       * rootPath 根目录(选填) 默认release.js所在目录 release.js不在根目录需修改
+       * mainBranch 发布分支(选填) 默认master
+       * baseDir 文件基础路径(选填) 默认桌面
        * versionFlag 是否打版本号(选填)
        */
       console.log("开始执行: buildInit函数");
       let {
         buildDir,
         releaseName,
+        rootPath = __dirname,
         mainBranch = "master",
-        baseDir = desktopDir,
+        baseDir = desktopPath,
         versionFlag = false
       } =
       this.option || {};
@@ -154,6 +162,8 @@ class Release {
         JSON.stringify({
           buildDir,
           releaseName,
+          rootPath,
+          mainBranch,
           baseDir,
           versionFlag
         })
@@ -165,11 +175,12 @@ class Release {
       // 发布路径
       let releaseSrc = path.resolve(baseDir, releaseDir);
       // build路径
-      let buildSrc = path.resolve(__dirname, buildDir);
+      let buildSrc = path.resolve(rootPath, buildDir);
 
       this.option.releaseSrc = releaseSrc;
       this.option.buildSrc = buildSrc;
       this.option.mainBranch = mainBranch;
+      this.option.rootPath = rootPath;
 
       console.log("发布路径: " + releaseSrc);
       console.log("build路径: " + buildSrc);
@@ -222,9 +233,9 @@ class Release {
     let regexp = new RegExp(regexpStr);
     for (let index = 0; index < diffArr.length; index++) {
       const element = diffArr[index];
-      if (regexp.test(element.fileName)) {
-        let pathSrc = path.resolve(__dirname, element.fileName);
-        let targetSrc = path.resolve(src, element.src);
+      if (regexp.test(element)) {
+        let pathSrc = path.resolve(this.option.rootPath, element);
+        let targetSrc = path.resolve(src, element);
         this.copyByPathSync(pathSrc, targetSrc);
       }
     }
@@ -244,13 +255,6 @@ class Release {
       diffArr = diffStr.split("\n");
       if (diffArr.length > 0) {
         console.log("改动文件: " + diffArr.join("\n\r"));
-        // fileName文件名 src完整路径
-        diffArr = diffArr.map(ele => {
-          return {
-            fileName: ele.match(/[^\\/]*$/)[0],
-            src: ele
-          };
-        });
         this.copyFiles(diffArr, this.option.releaseSrc);
         this.copyBackupFiles(diffArr);
       } else {

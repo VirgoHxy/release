@@ -3,7 +3,7 @@
 
 release.js 需要放在与package.json同级的根目录
 
-依赖shelljs和standard-version
+依赖shelljs(局部安装)和standard-version(全局)
 
 ```
 npm run releaseB 
